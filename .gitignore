@@ -1,0 +1,12 @@
+# Ignore python virtual environments
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Ignore editor settings
+.vscode/
+.idea/
+
+# Ignore local temporary/data analyst outputs if they are generated dynamically
+# (Optional: Keep .db or csv files if you want others to see them instantly on GitHub)
