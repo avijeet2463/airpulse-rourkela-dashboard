@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirPulse Rourkela — Air Quality Dashboard</title>
+    <meta name="description" content="Interactive air quality monitoring dashboard for Rourkela, Odisha — trends, weather impact, seasonal patterns, live PM2.5 predictions, and AI-powered insights.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌬️</text></svg>">
+</head>
+<body>
+
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">🌬️</div>
+        <div class="loading-title">AirPulse Rourkela</div>
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Loading air quality data…</p>
+    </div>
+
+    <!-- ================================================================== -->
+    <!-- Top Navigation Bar                                                  -->
+    <!-- ================================================================== -->
+    <nav class="top-nav">
+        <div class="nav-brand">
+            <div class="logo-icon">🌬️</div>
+            <div>
+                <span class="brand-name">AirPulse</span>
+                <span class="brand-sub"> Rourkela</span>
+            </div>
+        </div>
+        <div class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-page="overview">📊 Overview</button>
+            <button class="nav-tab" data-page="weather">🌦️ Weather Impact</button>
+            <button class="nav-tab" data-page="seasonal">🍂 Seasonal Analysis</button>
+            <button class="nav-tab" data-page="prediction">🔮 Prediction</button>
+        </div>
+        <div class="nav-info">
+            <span class="status-dot"></span>
+            <span>Rourkela, Odisha • 2024</span>
+        </div>
+    </nav>
+
+    <!-- ================================================================== -->
+    <!-- Main Content                                                        -->
+    <!-- ================================================================== -->
+    <main class="main-content" id="mainContent">
+
+        <!-- ============================================================== -->
+        <!-- PAGE 1: Overview                                                -->
+        <!-- ============================================================== -->
+        <section class="page active" id="page-overview">
+            <div class="page-header">
+                <h2>Air Quality Overview</h2>
+                <p>Comprehensive air quality monitoring for Rourkela, Odisha — Jan to Dec 2024</p>
+                <div class="header-badge">📍 22.26°N, 84.85°E &bull; 365 days of data</div>
+            </div>
+
+            <div class="grid grid-4 mb-2" id="kpi-cards">
+                <div class="card kpi-card animate-in">
+                    <div class="kpi-icon blue">📈</div>
+                    <div class="kpi-info">
+                        <div class="kpi-value" id="kpi-avg-aqi">--</div>
+                        <div class="kpi-label">Avg AQI</div>
+                        <div class="kpi-trend neutral">Year average</div>
+                    </div>
+                </div>
+                <div class="card kpi-card animate-in">
+                    <div class="kpi-icon violet">🫁</div>
+                    <div class="kpi-info">
+                        <div class="kpi-value" id="kpi-avg-pm25">--</div>
+                        <div class="kpi-label">Avg PM2.5 (μg/m³)</div>
+                        <div class="kpi-trend neutral">Year average</div>
+                    </div>
+                </div>
+                <div class="card kpi-card animate-in">
+                    <div class="kpi-icon emerald">✅</div>
+                    <div class="kpi-info">
+                        <div class="kpi-value" id="kpi-good-days">--</div>
+                        <div class="kpi-label">Good Air Days</div>
+                        <div class="kpi-trend down">AQI ≤ 50</div>
+                    </div>
+                </div>
+                <div class="card kpi-card animate-in">
+                    <div class="kpi-icon rose">⚠️</div>
+                    <div class="kpi-info">
+                        <div class="kpi-value" id="kpi-bad-days">--</div>
+                        <div class="kpi-label">Poor+ Air Days</div>
+                        <div class="kpi-trend up">AQI &gt; 200</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-full mb-2 animate-in">
+                <div class="chart-header">
+                    <h3>Daily PM2.5 Levels</h3>
+                    <div class="chart-toggle" id="overview-toggle">
+                        <button class="active" data-metric="pm25">PM2.5</button>
+                        <button data-metric="pm10">PM10</button>
+                        <button data-metric="aqi">AQI</button>
+                    </div>
+                </div>
+                <div class="chart-container tall"><canvas id="chart-timeseries"></canvas></div>
+            </div>
+
+            <div class="grid grid-2-1">
+                <div class="card animate-in">
+                    <h3 class="card-title">AQI Category Distribution</h3>
+                    <div class="chart-container" style="max-height:300px;"><canvas id="chart-aqi-donut"></canvas></div>
+                </div>
+                <div class="card animate-in">
+                    <h3 class="card-title">Top 10 Most Polluted Days</h3>
+                    <div style="overflow-y:auto; max-height:310px;">
+                        <table class="data-table" id="worst-days-table">
+                            <thead><tr><th>Date</th><th>PM2.5</th><th>AQI</th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- PAGE 2: Weather Impact                                          -->
+        <!-- ============================================================== -->
+        <section class="page" id="page-weather">
+            <div class="page-header">
+                <h2>Weather Impact Analysis</h2>
+                <p>How weather variables influence air pollution levels in Rourkela</p>
+                <div class="header-badge">🔬 Correlation & Scatter Analysis</div>
+            </div>
+
+            <div class="grid grid-3 mb-2">
+                <div class="card animate-in">
+                    <h3 class="card-title">Temperature vs PM2.5</h3>
+                    <div class="chart-container"><canvas id="chart-scatter-temp"></canvas></div>
+                    <div class="corr-cards mt-1">
+                        <div class="corr-card"><div class="corr-value negative" id="corr-temp">--</div><div class="corr-label">Pearson r</div></div>
+                    </div>
+                </div>
+                <div class="card animate-in">
+                    <h3 class="card-title">Humidity vs PM2.5</h3>
+                    <div class="chart-container"><canvas id="chart-scatter-humidity"></canvas></div>
+                    <div class="corr-cards mt-1">
+                        <div class="corr-card"><div class="corr-value" id="corr-humidity">--</div><div class="corr-label">Pearson r</div></div>
+                    </div>
+                </div>
+                <div class="card animate-in">
+                    <h3 class="card-title">Wind Speed vs PM2.5</h3>
+                    <div class="chart-container"><canvas id="chart-scatter-wind"></canvas></div>
+                    <div class="corr-cards mt-1">
+                        <div class="corr-card"><div class="corr-value negative" id="corr-wind">--</div><div class="corr-label">Pearson r</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card animate-in">
+                    <h3 class="card-title">Rainy vs Dry Day Comparison</h3>
+                    <div class="comparison-grid">
+                        <div class="compare-card rainy">
+                            <div class="compare-icon">🌧️</div>
+                            <div class="compare-title">Rainy Days</div>
+                            <div class="compare-value" id="rainy-pm25">--</div>
+                            <div class="compare-unit">Avg PM2.5 (μg/m³)</div>
+                        </div>
+                        <div class="compare-card dry">
+                            <div class="compare-icon">☀️</div>
+                            <div class="compare-title">Dry Days</div>
+                            <div class="compare-value" id="dry-pm25">--</div>
+                            <div class="compare-unit">Avg PM2.5 (μg/m³)</div>
+                        </div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-item"><div class="stat-value text-teal" id="rainy-days-count">--</div><div class="stat-label">Rainy Days</div></div>
+                        <div class="stat-item"><div class="stat-value text-amber" id="dry-days-count">--</div><div class="stat-label">Dry Days</div></div>
+                        <div class="stat-item"><div class="stat-value text-emerald" id="rain-reduction">--</div><div class="stat-label">PM2.5 Reduction</div></div>
+                    </div>
+                </div>
+                <div class="card animate-in">
+                    <h3 class="card-title">Correlation Heatmap Summary</h3>
+                    <div class="chart-container" style="max-height:320px;"><canvas id="chart-corr-bars"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- PAGE 3: Seasonal Analysis                                       -->
+        <!-- ============================================================== -->
+        <section class="page" id="page-seasonal">
+            <div class="page-header">
+                <h2>Seasonal Analysis</h2>
+                <p>How air quality varies across seasons in Rourkela</p>
+                <div class="header-badge">🍂 Winter &bull; Summer &bull; Monsoon &bull; Post-Monsoon</div>
+            </div>
+
+            <div class="season-cards mb-2">
+                <div class="season-card season-winter animate-in">
+                    <div class="season-name">❄️ Winter</div>
+                    <div class="season-aqi" id="season-winter-aqi">--</div>
+                    <div class="season-sub">Avg AQI</div>
+                </div>
+                <div class="season-card season-summer animate-in">
+                    <div class="season-name">☀️ Summer</div>
+                    <div class="season-aqi" id="season-summer-aqi">--</div>
+                    <div class="season-sub">Avg AQI</div>
+                </div>
+                <div class="season-card season-monsoon animate-in">
+                    <div class="season-name">🌧️ Monsoon</div>
+                    <div class="season-aqi" id="season-monsoon-aqi">--</div>
+                    <div class="season-sub">Avg AQI</div>
+                </div>
+                <div class="season-card season-post-monsoon animate-in">
+                    <div class="season-name">🍂 Post-Monsoon</div>
+                    <div class="season-aqi" id="season-post-aqi">--</div>
+                    <div class="season-sub">Avg AQI</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2 mb-2">
+                <div class="card animate-in">
+                    <h3 class="card-title">Seasonal Pollutant Comparison</h3>
+                    <div class="chart-container tall"><canvas id="chart-seasonal-bars"></canvas></div>
+                </div>
+                <div class="card animate-in">
+                    <h3 class="card-title">Monthly PM2.5 Trend</h3>
+                    <div class="chart-container tall"><canvas id="chart-monthly-bars"></canvas></div>
+                </div>
+            </div>
+
+            <div class="card card-full animate-in">
+                <h3 class="card-title">Seasonal Summary Table</h3>
+                <table class="data-table" id="seasonal-table">
+                    <thead><tr><th>Season</th><th>Avg PM2.5</th><th>Avg PM10</th><th>Avg NO₂</th><th>Avg SO₂</th><th>Avg Temp</th><th>Avg Humidity</th><th>Total Rainfall</th><th>Days</th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- PAGE 4: Live Prediction (with Charts)                           -->
+        <!-- ============================================================== -->
+        <section class="page" id="page-prediction">
+            <div class="page-header">
+                <h2>Live Air Quality Prediction</h2>
+                <p>Predict PM2.5 and AQI using weather inputs — powered by client-side machine learning</p>
+                <div class="header-badge">🧠 No API keys — multiple linear regression runs 100% in your browser</div>
+            </div>
+
+            <!-- Row 1: Inputs + Result -->
+            <div class="grid grid-2 mb-2">
+                <div class="card animate-in">
+                    <h3 class="card-title">🎛️ Weather Inputs</h3>
+                    <div class="slider-group">
+                        <div class="slider-label"><span>🌡️ Temperature (°C)</span><span class="slider-value" id="val-temp">25</span></div>
+                        <input type="range" id="slider-temp" min="5" max="45" value="25" step="0.5">
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label"><span>💧 Humidity (%)</span><span class="slider-value" id="val-humidity">55</span></div>
+                        <input type="range" id="slider-humidity" min="10" max="100" value="55" step="1">
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label"><span>💨 Wind Speed (km/h)</span><span class="slider-value" id="val-wind">6</span></div>
+                        <input type="range" id="slider-wind" min="0.5" max="25" value="6" step="0.5">
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label"><span>🌧️ Precipitation (mm)</span><span class="slider-value" id="val-precip">0</span></div>
+                        <input type="range" id="slider-precip" min="0" max="50" value="0" step="0.5">
+                    </div>
+                    <div class="slider-group">
+                        <div class="slider-label"><span>📅 Season</span></div>
+                        <select class="season-select" id="select-season">
+                            <option value="Winter">❄️ Winter (Dec-Feb)</option>
+                            <option value="Summer">☀️ Summer (Mar-May)</option>
+                            <option value="Monsoon" selected>🌧️ Monsoon (Jun-Sep)</option>
+                            <option value="Post-Monsoon">🍂 Post-Monsoon (Oct-Nov)</option>
+                        </select>
+                    </div>
+                    <button class="predict-btn" id="btn-predict" onclick="runPrediction()">🔮 Predict Air Quality</button>
+                </div>
+
+                <div class="card animate-in">
+                    <h3 class="card-title">🎯 Prediction Result</h3>
+                    <div class="gauge-wrapper">
+                        <svg class="gauge-svg" viewBox="0 0 200 130">
+                            <path d="M 15 115 A 85 85 0 0 1 185 115" class="gauge-bg"/>
+                            <path d="M 15 115 A 85 85 0 0 1 185 115" class="gauge-fill" id="gauge-fill" stroke-dasharray="267" stroke-dashoffset="267"/>
+                            <text x="100" y="92" class="gauge-value-text" id="gauge-value">--</text>
+                            <text x="100" y="112" class="gauge-label-text">Predicted AQI</text>
+                        </svg>
+                    </div>
+                    <div class="prediction-result">
+                        <div class="prediction-category" id="pred-category" style="background:rgba(148,163,184,0.12);color:var(--text-muted);">Awaiting Prediction</div>
+                    </div>
+                    <div class="prediction-stats">
+                        <div class="pred-stat"><div class="value" id="pred-pm25">--</div><div class="label">PM2.5 (μg/m³)</div></div>
+                        <div class="pred-stat"><div class="value" id="pred-pm10">--</div><div class="label">PM10 (est.)</div></div>
+                        <div class="pred-stat"><div class="value" id="pred-aqi">--</div><div class="label">AQI Value</div></div>
+                    </div>
+                    <div class="prediction-advisory" id="pred-advisory">
+                        <h4>💡 Health Advisory</h4>
+                        <p id="pred-advisory-text">Adjust the weather sliders and click "Predict" to see the result.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Prediction Charts -->
+            <div class="grid grid-2 mb-2">
+                <div class="card animate-in">
+                    <h3 class="card-title">📊 Your Prediction vs Seasonal Averages</h3>
+                    <div class="chart-container"><canvas id="chart-pred-comparison"></canvas></div>
+                </div>
+                <div class="card animate-in">
+                    <h3 class="card-title">📈 PM2.5 Sensitivity Analysis</h3>
+                    <div class="chart-container"><canvas id="chart-sensitivity"></canvas></div>
+                </div>
+            </div>
+
+            <!-- Row 3: Model Info -->
+            <div class="card card-full animate-in">
+                <h3 class="card-title">📐 Model Information</h3>
+                <div class="stat-row">
+                    <div class="stat-item"><div class="stat-value text-blue" id="model-r2">--</div><div class="stat-label">R² Score</div></div>
+                    <div class="stat-item"><div class="stat-value text-teal" id="model-samples">365</div><div class="stat-label">Training Samples</div></div>
+                    <div class="stat-item"><div class="stat-value text-amber" id="model-features">5</div><div class="stat-label">Features</div></div>
+                    <div class="stat-item"><div class="stat-value text-rose" id="model-type">MLR</div><div class="stat-label">Algorithm</div></div>
+                </div>
+                <p style="font-size:0.75rem;color:var(--text-muted);margin-top:0.75rem;line-height:1.5;">
+                    Multiple Linear Regression trained on 365 days of Rourkela air quality data. Features: temperature, humidity, wind speed, precipitation, season (one-hot encoded). Target: PM2.5. AQI computed using India NAQI standard.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================================================================== -->
+    <!-- Floating AI Chat Widget (Available on ALL pages)                     -->
+    <!-- ================================================================== -->
+    <button class="chat-fab" id="chatFab" onclick="toggleChat()" title="AirPulse AI Assistant">🤖</button>
+
+    <div class="chat-panel" id="chatPanel">
+        <div class="chat-panel-header">
+            <h3>🤖 AirPulse AI Assistant</h3>
+            <button onclick="toggleChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message bot">
+                <div class="chat-avatar">🤖</div>
+                <div class="chat-bubble">
+                    Hi! I'm the <strong>AirPulse Assistant</strong>. Ask me anything about Rourkela's air quality — <span class="highlight">worst month</span>, <span class="highlight">rain impact</span>, <span class="highlight">seasonal trends</span>, and more!
+                </div>
+            </div>
+        </div>
+        <div class="chat-suggestions" id="chat-suggestions">
+            <button class="suggestion-chip" onclick="askAgent('What was the worst month?')">Worst month?</button>
+            <button class="suggestion-chip" onclick="askAgent('How does rain affect pollution?')">Rain impact</button>
+            <button class="suggestion-chip" onclick="askAgent('Compare winter vs monsoon')">Winter vs Monsoon</button>
+            <button class="suggestion-chip" onclick="askAgent('Show AQI breakdown')">AQI breakdown</button>
+            <button class="suggestion-chip" onclick="askAgent('Health tips')">Health tips</button>
+        </div>
+        <div class="chat-input-wrapper">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Ask about air quality data..." onkeydown="if(event.key==='Enter')sendChat()">
+            <button class="chat-send" onclick="sendChat()" title="Send">➤</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="app.js"></script>
+    <script src="charts.js"></script>
+    <script src="prediction.js"></script>
+    <script src="agent.js"></script>
+</body>
+</html>

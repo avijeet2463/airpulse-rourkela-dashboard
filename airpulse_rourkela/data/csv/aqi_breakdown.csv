@@ -1,0 +1,6 @@
+aqi_category,days_count,percentage,avg_pm25,avg_aqi
+Good,125,34.2,16.4,20.0
+Satisfactory,60,16.4,43.2,72.0
+Moderate,55,15.1,74.9,148.0
+Poor,61,16.7,106.6,254.0
+Very Poor,64,17.5,134.0,311.0
