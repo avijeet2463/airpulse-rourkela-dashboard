@@ -2,7 +2,7 @@
 
 # 🌬️ AirPulse Rourkela: Air Quality Analytics & ML Dashboard
 
-[![Live Dashboard](https://img.shields.io/badge/🌐_Live_Dashboard-Open_Now-2ea44f?style=for-the-badge)](http://127.0.0.1:5500/airpulse_rourkela/index.html)
+[![Live Dashboard](https://img.shields.io/badge/🌐_Live_Dashboard-Open_Now-2ea44f?style=for-the-badge)](https://airpulse-rourkela-dashboard-s8n8.vercel.app/)
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![SQLite](https://img.shields.io/badge/SQLite-3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://sqlite.org)
 [![Power BI](https://img.shields.io/badge/Power_BI-Dashboard-F2C811?style=for-the-badge&logo=powerbi&logoColor=black)](https://powerbi.microsoft.com)
@@ -19,7 +19,7 @@ Built with Python · SQLite · Power BI · Chart.js · Client-Side Linear Regres
 
 | Resource | Link |
 |---|---|
-| 🌐 Live Web Dashboard | [Open Dashboard](http://127.0.0.1:5500/airpulse_rourkela/index.html) |
+| 🌐 Live Web Dashboard | [Open Dashboard](https://airpulse-rourkela-dashboard-s8n8.vercel.app/) |
 | 📁 GitHub Repository | [avijeet2463/airpulse-rourkela-dashboard](https://github.com/avijeet2463/airpulse-rourkela-dashboard) |
 
 ---
@@ -234,7 +234,7 @@ Final-year CSE student focused on data analytics, relational engineering, and cl
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Avijeet_Mohapatra-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/avijeet-mohapatra-a4573a254/)
 [![GitHub](https://img.shields.io/badge/GitHub-avijeet2463-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/avijeet2463)
-[![Portfolio](https://img.shields.io/badge/Live_Dashboard-Visit-2ea44f?style=for-the-badge)](http://127.0.0.1:5500/airpulse_rourkela/index.html)
+[![Portfolio](https://img.shields.io/badge/Live_Dashboard-Visit-2ea44f?style=for-the-badge)](https://airpulse-rourkela-dashboard-s8n8.vercel.app/)
 
 </div>
 
