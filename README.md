@@ -38,7 +38,7 @@ By merging air quality metrics with meteorological data and Google Trends search
 
 | 📊 Overview Page | 🌦️ Weather Impact | 🍂 Seasonal Analysis |
 |:---:|:---:|:---:|
-| ![Overview](airpulse_rourkela\outputs\plots\overview.png) | ![Weather Impact](airpulse_rourkela\outputs\plots\Weather%20Imapact.png) | ![Seasonal Analysis](airpulse_rourkela\outputs\plots\Seasonal%20Analysis.png) |
+| ![Overview](airpulse_rourkela/outputs/plots/overview.png) | ![Weather Impact](airpulse_rourkela/outputs/plots/Weather%20Imapact.png) | ![Seasonal Analysis](airpulse_rourkela/outputs/plots/Seasonal%20Analysis.png) |
 
 > 👆 **3 interactive pages** — Overview · Weather Impact · Seasonal Analysis 
 
